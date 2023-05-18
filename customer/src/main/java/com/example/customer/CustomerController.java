@@ -14,9 +14,10 @@ public class CustomerController {
     private final CustomerRepo customerRepo;
     private static final Logger log = LoggerFactory.getLogger(CustomerController.class);
 
-    CustomerController(CustomerRepo customerRepo) {
+    public CustomerController(CustomerRepo customerRepo) {
         this.customerRepo = customerRepo;
     }
+
 
     @RequestMapping
     public List<Customer> getAllCustomers() {
@@ -52,9 +53,10 @@ public class CustomerController {
 
     @PostMapping("/add")
     public String addCustomer(@RequestBody Customer customer) {
+        Customer tempcustomer = new Customer();
         customerRepo.save(customer);
         log.info("Customer have been added");
-        return "Customer have been added";
+        return "Customer " + customer.getFirstName() + " " + customer.getLastName() + " have been added";
     }
     @RequestMapping("/addWithParams")
     public String addCustomerWithParams(@RequestParam String ssn, @RequestParam String firstName, @RequestParam String lastName,
