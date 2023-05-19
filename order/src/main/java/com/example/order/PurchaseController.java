@@ -44,6 +44,7 @@ public class PurchaseController {
         return "Customer id not valid";
          */
 
+        purchaseRepo.save(new Purchase(address, zipcode, locality));
         return "temp message";
     }
 
