@@ -53,7 +53,6 @@ public class CustomerController {
 
     @PostMapping("/add")
     public String addCustomer(@RequestBody Customer customer) {
-        Customer tempcustomer = new Customer();
         customerRepo.save(customer);
         log.info("Customer have been added");
         return "Customer " + customer.getFirstName() + " " + customer.getLastName() + " have been added";
