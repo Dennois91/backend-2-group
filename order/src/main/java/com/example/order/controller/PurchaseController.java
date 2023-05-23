@@ -39,17 +39,21 @@ public class PurchaseController {
 
     @PostMapping("/add")
     public String addPurchase(@RequestBody Purchase purchase) {
-        Customer customer = restTemplate.getForObject(
-                "http://localhost:8002/customers/" + purchase.getCustomerId(), Customer.class);
-        if (customer != null) {
-            repo.save(purchase);
-            if (repo.findById(purchase.getId()).isPresent()) {
-                LOGGER.info("Updated purchase id: " + purchase.getId());
-                return "Purchase updated";
-            } else {
-                LOGGER.info("Created purchase to customer id: " + purchase.getCustomerId());
-                return "Purchase created";
+        try {
+            Customer customer = restTemplate.getForObject(
+                    "http://localhost:8002/customers/" + purchase.getCustomerId(), Customer.class);
+            if (customer != null) {
+                repo.save(purchase);
+                if (repo.findById(purchase.getId()).isPresent()) {
+                    LOGGER.info("Updated purchase id: " + purchase.getId());
+                    return "Purchase updated";
+                } else {
+                    LOGGER.info("Created purchase to customer id: " + purchase.getCustomerId());
+                    return "Purchase created";
+                }
             }
+        } catch (Exception e) {
+            LOGGER.warning(e.toString());
         }
         return "Customer id not valid";
     }
