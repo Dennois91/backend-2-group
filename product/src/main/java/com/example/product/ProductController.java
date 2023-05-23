@@ -24,7 +24,8 @@ public class ProductController {
     }
 
     @RequestMapping("/{id}")
-    public Product getProduct(@PathVariable("id") Long id) {
+    public Product getProduct(@PathVariable Long id) {
+        log.info("All products matching the chosen ID have been returned!");
         return repo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.valueOf(id)));
     }
