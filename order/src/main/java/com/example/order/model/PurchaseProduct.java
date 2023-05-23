@@ -1,4 +1,4 @@
-package com.example.order;
+package com.example.order.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,6 +14,8 @@ import java.time.Instant;
 public class PurchaseProduct {
     @Id @GeneratedValue
     private Long id;
+    private Long productId;
+    private Long purchaseId;
     private String title;
     private int quantity;
     private double price;
@@ -24,30 +26,12 @@ public class PurchaseProduct {
     @UpdateTimestamp
     private @Setter(AccessLevel.NONE) Instant dateUpdated;
 
-    /* TODO
-    @ManyToOne(optional = false)
-    @JoinColumn
-    private Product product;
-     */
-
-    @ManyToOne(optional = false)
-    @JoinColumn
-    private Purchase purchase;
-
-    public PurchaseProduct(String title, int quantity, double price, /* Product product, */ Purchase purchase) {
-        this.title = title;
-        this.quantity = quantity;
-        this.price = price;
-        // this.product = product; TODO
-        this.purchase = purchase;
-    }
-
-    public PurchaseProduct(Long id, String title, int quantity, double price,  /* Product product, */ Purchase purchase) {
+    public PurchaseProduct(Long id, Long productId, Long purchaseId, String title, int quantity, double price) {
         this.id = id;
+        this.productId = productId;
+        this. purchaseId = purchaseId;
         this.title = title;
         this.quantity = quantity;
         this.price = price;
-        // this.product = product; TODO
-        this.purchase = purchase;
     }
 }

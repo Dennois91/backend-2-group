@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  orders:
+    build: .
+    ports:
+      - "8001:8080"
+    environment:
+      - ORDERS_SERVICE_URL=http://users:8080/
+  customers:
+    image: ghcr.io/jonathanh162/customer:latest
+    ports:
+      - "8002:8080"
+    environment:
+      - DB_PASSWORD=${DB_PASSWORD}
+      - MYSQL_HOST=host.docker.internal
+  products:
+    image: ghcr.io/dennois91/product:latest
+    ports:
+      - "8003:8080"
+    environment:
+      - DB_PASSWORD=${DB_PASSWORD}
+      - MYSQL_HOST=host.docker.internal
