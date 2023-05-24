@@ -1,0 +1,27 @@
+version: '3'
+services:
+  purchase-mysql:
+    container_name: purchase-mysql
+    image: mysql
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_USER: springuser
+      MYSQL_DATABASE: db_purchase
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: yes
+    restart: always
+  spring-purchases:
+    build: .
+    ports:
+      - "8001:8080"
+    environment:
+      MYSQL_HOST: purchase-mysql
+      DB_USER: springuser
+      DB_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PORT: 3306
+      MYSQL_DB: db_purchase
+    depends_on:
+      - purchase-mysql
+    restart: always
+

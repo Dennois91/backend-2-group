@@ -37,26 +37,26 @@ public class PurchaseController {
                 -> new EntityNotFoundException("Purchase id: " + id + " not valid"));
     }
 
-    @PostMapping("/add")
-    public String addPurchase(@RequestBody Purchase purchase) {
-        try {
-            Customer customer = restTemplate.getForObject(
-                    "http://localhost:8002/customers/" + purchase.getCustomerId(), Customer.class);
-            if (customer != null) {
-                repo.save(purchase);
-                if (repo.findById(purchase.getId()).isPresent()) {
-                    LOGGER.info("Updated purchase id: " + purchase.getId());
-                    return "Purchase updated";
-                } else {
-                    LOGGER.info("Created purchase to customer id: " + purchase.getCustomerId());
-                    return "Purchase created";
-                }
-            }
-        } catch (Exception e) {
-            LOGGER.warning(e.toString());
-        }
-        return "Customer id not valid";
-    }
+//    @PostMapping("/add")
+//    public String addPurchase(@RequestBody Purchase purchase) {
+//        try {
+//            Customer customer = restTemplate.getForObject(
+//                    "http://localhost:8080/customers/" + purchase.getCustomerId(), Customer.class);
+//            if (customer != null) {
+//                repo.save(purchase);
+//                if (repo.findById(purchase.getId()).isPresent()) {
+//                    LOGGER.info("Updated purchase id: " + purchase.getId());
+//                    return "Purchase updated";
+//                } else {
+//                    LOGGER.info("Created purchase to customer id: " + purchase.getCustomerId());
+//                    return "Purchase created";
+//                }
+//            }
+//        } catch (Exception e) {
+//            LOGGER.warning(e.toString());
+//        }
+//        return "Customer id not valid";
+//    }
 
     @RequestMapping("/delete/{id}")
     public String deletePurchase(@PathVariable Long id) {
