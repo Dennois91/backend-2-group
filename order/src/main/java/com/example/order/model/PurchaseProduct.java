@@ -29,7 +29,7 @@ public class PurchaseProduct {
     public PurchaseProduct(Long id, Long productId, Long purchaseId, String title, int quantity, double price) {
         this.id = id;
         this.productId = productId;
-        this. purchaseId = purchaseId;
+        this.purchaseId = purchaseId;
         this.title = title;
         this.quantity = quantity;
         this.price = price;

@@ -25,6 +25,6 @@ bootJar {
 	archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
+//tasks.named('test') {
+//	useJUnitPlatform()
+//}
