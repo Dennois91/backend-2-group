@@ -9,3 +9,7 @@ $ curl -X POST -H "Content-Type: application/json" -d '{
 >   "price": 9.99,
 >   "balance": 100
 > }' http://localhost:8080/add
+
+#docker push ghcr.io/dennois91/order
+
+#docker build -t ghcr.io/dennois91/order .
