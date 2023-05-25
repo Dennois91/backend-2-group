@@ -41,32 +41,32 @@ public class PurchaseProductController {
                 .orElseThrow(() -> new EntityNotFoundException("Purchased product id: " + id + " not valid"));
     }
 
-//    @PostMapping("/add")
-//    public String addPurchaseProduct(@RequestBody PurchaseProduct purchaseProduct) {
-//
-//        try {
-//            Product product = restTemplate.getForObject(
-//                    "http://localhost:8080/products/" + purchaseProduct.getProductId(), Product.class);
-//            if (product != null) {
-//                if (purchaseRepo.findById(purchaseProduct.getPurchaseId()).isPresent()) {
-//                    repo.save(new PurchaseProduct(purchaseProduct.getId(), purchaseProduct.getProductId(),
-//                            purchaseProduct.getPurchaseId(), product.getTitle(),
-//                            purchaseProduct.getQuantity(), product.getPrice()));
-//                    if (repo.findById(purchaseProduct.getId()).isPresent()) {
-//                        LOGGER.info("Updated purchased product id: " + purchaseProduct.getId());
-//                        return "Purchased product updated";
-//                    } else {
-//                        LOGGER.info("Created purchased product to customer id: " + purchaseProduct.getPurchaseId());
-//                        return "Purchased product created";
-//                    }
-//                }
-//                return "Purchase id not valid";
-//            }
-//        } catch (Exception e) {
-//            LOGGER.warning(e.toString());
-//        }
-//        return "Product id not valid";
-//    }
+    @PostMapping("/add")
+    public String addPurchaseProduct(@RequestBody PurchaseProduct purchaseProduct) {
+
+        try {
+            Product product = restTemplate.getForObject(
+                    "http://service-products:8080/products/" + purchaseProduct.getProductId(), Product.class);
+            if (product != null) {
+                if (purchaseRepo.findById(purchaseProduct.getPurchaseId()).isPresent()) {
+                    repo.save(new PurchaseProduct(purchaseProduct.getId(), purchaseProduct.getProductId(),
+                            purchaseProduct.getPurchaseId(), product.getTitle(),
+                            purchaseProduct.getQuantity(), product.getPrice()));
+                    if (purchaseProduct.getId() != null && repo.findById(purchaseProduct.getId()).isPresent()) {
+                        LOGGER.info("Updated purchased product id: " + purchaseProduct.getId());
+                        return "Purchased product updated";
+                    } else {
+                        LOGGER.info("Created purchased product to customer id: " + purchaseProduct.getPurchaseId());
+                        return "Purchased product created";
+                    }
+                }
+                return "Purchase id not valid";
+            }
+        } catch (Exception e) {
+            LOGGER.warning(e.toString());
+        }
+        return "Product id not valid";
+    }
 
     @RequestMapping("/delete/{id}")
     public String deletePurchaseProduct(@PathVariable Long id) {

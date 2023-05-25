@@ -1,5 +1,6 @@
 version: '3'
 services:
+#  purchases --------------------------
   purchase-mysql:
     container_name: purchase-mysql
     image: mysql
@@ -11,8 +12,10 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_RANDOM_ROOT_PASSWORD: yes
     restart: always
-  spring-purchases:
-    build: .
+
+  service-purchases:
+#    build: .
+    image: ghcr.io/lukaschyle/order
     ports:
       - "8001:8080"
     environment:
@@ -25,3 +28,56 @@ services:
       - purchase-mysql
     restart: always
 
+#  customers --------------------------
+  customer-mysql:
+    container_name: customer-mysql
+    image: mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_USER: springuser
+      MYSQL_DATABASE: db_customer
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: yes
+    restart: always
+
+  service-customers:
+    image: ghcr.io/jonathanh162/customer:latest
+    ports:
+      - "8002:8080"
+    environment:
+      MYSQL_HOST: customer-mysql
+      DB_USER: springuser
+      DB_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PORT: 3306
+      MYSQL_DB: db_customer
+    depends_on:
+      - customer-mysql
+    restart: always
+
+#  products --------------------------
+  product-mysql:
+    container_name: product-mysql
+    image: mysql
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_USER: springuser
+      MYSQL_DATABASE: db_product
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: yes
+    restart: always
+
+  service-products:
+    image: ghcr.io/dennois91/product:latest
+    ports:
+      - "8003:8080"
+    environment:
+      MYSQL_HOST: product-mysql
+      DB_USER: springuser
+      DB_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PORT: 3306
+      MYSQL_DB: db_product
+    depends_on:
+      - product-mysql
+    restart: always
