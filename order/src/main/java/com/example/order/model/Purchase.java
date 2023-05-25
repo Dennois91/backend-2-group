@@ -21,10 +21,17 @@ public class Purchase {
     private String zipCode;
     private String locality;
 
-
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private @Setter(AccessLevel.NONE) Instant dateCreated;
     @UpdateTimestamp
     private @Setter(AccessLevel.NONE) Instant dateUpdated;
+
+    public Purchase(Long id, Long customerId, String address, String zipCode, String locality) {
+        this.id = id;
+        this.customerId = customerId;
+        this.address = address;
+        this.zipCode = zipCode;
+        this.locality = locality;
+    }
 }
