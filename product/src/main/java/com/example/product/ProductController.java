@@ -1,8 +1,11 @@
 package com.example.product;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -31,16 +34,22 @@ public class ProductController {
     }
 
     @PostMapping("/add")
-    public String addProduct(@RequestBody Product p) {
-        String s;
+    public ResponseEntity<String> addProduct(@Valid @RequestBody Product p) {
+        String send;
         if (p.getId() != null && repo.existsById(p.getId())) {
-            s = "Updated: ";
+            send = "Updated: ";
         } else {
-            s = "Added: ";
+            send = "Added: ";
         }
-        repo.save(p);
-        log.info(s + p);
-        return s + p;
+
+        try {
+            repo.save(p);
+            log.info(send + p);
+            return ResponseEntity.ok(send + p);
+        } catch (Exception e) {
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
     }
 
     @RequestMapping("/delete/{id}")
