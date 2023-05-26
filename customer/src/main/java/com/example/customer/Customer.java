@@ -17,15 +17,21 @@ public class Customer {
     @Id
     @GeneratedValue
     private Long id;
-    @Min(0) @Max(12) @NotBlank
+    @Size(min = 1, max = 12)
+    @NotBlank
     private String ssn;
-    @Min(0) @Max(20) @NotBlank @Pattern(regexp = "^[a-zA-Z]+$")
+    @Pattern(regexp = "^[a-zA-Z\s]{1,20}$")
+    @NotBlank
     private String firstName;
-    @Min(0) @Max(20) @NotBlank @Pattern(regexp = "^[a-zA-Z]+$")
+    @Pattern(regexp = "^[a-zA-Z\s]{1,20}$")
+    @NotBlank
     private String lastName;
-    @Min(0) @Max(12) @NotBlank
+    @Size(min = 1, max = 12)
+    @NotBlank
     private String phone;
-    @Min(0) @Max(20) @NotBlank @Email
+    @Size(min = 1, max = 30)
+    @Email
+    @NotBlank
     private String email;
 
     @Column(nullable = false, updatable = false)
