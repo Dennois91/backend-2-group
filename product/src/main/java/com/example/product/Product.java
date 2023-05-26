@@ -1,9 +1,7 @@
 package com.example.product;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -18,13 +16,27 @@ public class Product {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Size(min = 1, max = 30)
+    @NotBlank
     private String title;
+
+    @Size(min = 1, max = 200)
+    @NotBlank
     private String description;
+
+    @Min(0)
+    @Max(1000000)
     private double price;
+
+    @Min(0)
+    @Max(9999999)
     private int balance;
+
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private @Setter(AccessLevel.NONE) Instant dateCreated;
+
     @UpdateTimestamp
     private @Setter(AccessLevel.NONE) Instant dateUpdated;
 
@@ -34,6 +46,7 @@ public class Product {
         this.price = price;
         this.balance = balance;
     }
+
     public Product(Long id, String title, String description, double price, int balance) {
         this.id = id;
         this.title = title;

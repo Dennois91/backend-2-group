@@ -10,6 +10,6 @@ $ curl -X POST -H "Content-Type: application/json" -d '{
 >   "balance": 100
 > }' http://localhost:8080/add
 
-#docker push ghcr.io/dennois91/order
+#docker push ghcr.io/dennois91/product
 
-#docker build -t ghcr.io/dennois91/order .
+#docker build -t ghcr.io/dennois91/product .
