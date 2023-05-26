@@ -1,6 +1,8 @@
 package com.example.order.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,13 +14,18 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Purchase {
-
     @Id
     @GeneratedValue
     private Long id;
     private Long customerId;
+    @NotBlank
+    @Size(min = 1, max = 20)
     private String address;
+    @NotBlank
+    @Size(min = 1, max = 10)
     private String zipCode;
+    @NotBlank
+    @Size(min = 1, max = 20)
     private String locality;
 
     @Column(nullable = false, updatable = false)

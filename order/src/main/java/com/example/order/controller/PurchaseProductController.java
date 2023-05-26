@@ -5,7 +5,9 @@ import com.example.order.repository.PurchaseProductRepo;
 import com.example.order.repository.PurchaseRepo;
 import com.example.order.model.PurchaseProduct;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,8 +44,7 @@ public class PurchaseProductController {
     }
 
     @PostMapping("/add")
-    public String addPurchaseProduct(@RequestBody PurchaseProduct purchaseProduct) {
-
+    public String addPurchaseProduct(@Valid @RequestBody PurchaseProduct purchaseProduct) {
         try {
             Product product = restTemplate.getForObject(
                     "http://service-products:8080/products/" + purchaseProduct.getProductId(), Product.class);
