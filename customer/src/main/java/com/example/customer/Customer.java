@@ -1,6 +1,7 @@
 package com.example.customer;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -16,10 +17,15 @@ public class Customer {
     @Id
     @GeneratedValue
     private Long id;
+    @Min(0) @Max(12) @NotBlank
     private String ssn;
+    @Min(0) @Max(20) @NotBlank @Pattern(regexp = "^[a-zA-Z]+$")
     private String firstName;
+    @Min(0) @Max(20) @NotBlank @Pattern(regexp = "^[a-zA-Z]+$")
     private String lastName;
+    @Min(0) @Max(12) @NotBlank
     private String phone;
+    @Min(0) @Max(20) @NotBlank @Email
     private String email;
 
     @Column(nullable = false, updatable = false)

@@ -1,6 +1,7 @@
 package com.example.customer;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +53,7 @@ public class CustomerController {
     }
 
     @PostMapping("/add")
-    public String addCustomer(@RequestBody Customer customer) {
+    public String addCustomer(@Valid @RequestBody Customer customer) {
         customerRepo.save(customer);
         log.info("Customer have been added");
         return "Customer " + customer.getFirstName() + " " + customer.getLastName() + " have been added";
