@@ -78,7 +78,7 @@ public class ProductController {
                 + " - Product with the specified ID does not exist!" + " Id used = " + e.getMessage());
     }
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<String> handleMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+    public ResponseEntity<String> handleMethodNotSupportedException() {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request. Please check the URL.");
     }
     @ExceptionHandler(HttpClientErrorException.BadRequest.class)
@@ -86,15 +86,15 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("BadRequest" + e.getMessage());
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<String> handleMethodArgumentNotValidException() {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request. Please check the URL.");
     }
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<String> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+    public ResponseEntity<String> handleMethodArgumentTypeMismatchException() {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request. Please check the URL.");
     }
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception ex) {
+    public ResponseEntity<String> handleException() {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
     }
 }
