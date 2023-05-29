@@ -6,7 +6,7 @@ import com.example.order.model.Purchase;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,19 +26,27 @@ public class PurchaseController {
         this.repo = purchaseRepo;
     }
 
+    @Retryable
     @RequestMapping
     public List<Purchase> getPurchases() {
         LOGGER.info("getPurchases called");
         return repo.findAll();
     }
 
+    @Retryable
     @RequestMapping("/{id}")
     public Purchase getPurchaseById(@PathVariable Long id) {
-        LOGGER.info("getPurchaseById: " + id + " called");
-        return repo.findById(id).orElseThrow(()
-                -> new EntityNotFoundException("Purchase id: " + id + " not valid"));
+        try {
+            LOGGER.info("getPurchaseById: " + id + " called");
+            return repo.findById(id).orElseThrow(()
+                    -> new EntityNotFoundException("Purchase id: " + id + " not valid"));
+        } catch (Exception e) {
+            LOGGER.warning(e.toString());
+        }
+        return null;
     }
 
+    @Retryable
     @PostMapping("/add")
     public String addPurchase(@Valid @RequestBody Purchase purchase) {
         try {
@@ -61,6 +69,7 @@ public class PurchaseController {
         return "Customer id not valid";
     }
 
+    @Retryable
     @RequestMapping("/delete/{id}")
     public String deletePurchase(@PathVariable Long id) {
         if (repo.findById(id).isPresent()) {
