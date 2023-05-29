@@ -1,6 +1,9 @@
 package com.example.order.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -17,6 +20,7 @@ public class PurchaseProduct {
     private Long productId;
     private Long purchaseId;
     private String title;
+    @Min(1) @Max(9999999)
     private int quantity;
     private double price;
 

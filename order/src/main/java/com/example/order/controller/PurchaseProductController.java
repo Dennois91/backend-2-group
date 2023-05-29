@@ -5,7 +5,11 @@ import com.example.order.repository.PurchaseProductRepo;
 import com.example.order.repository.PurchaseRepo;
 import com.example.order.model.PurchaseProduct;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,22 +32,29 @@ public class PurchaseProductController {
         this.purchaseRepo = purchaseRepo;
     }
 
+    @Retryable
     @RequestMapping
     public List<PurchaseProduct> getPurchaseProducts() {
         LOGGER.info("getPurchaseProducts called");
         return repo.findAll();
     }
 
+    @Retryable
     @RequestMapping("/{id}")
     public PurchaseProduct getPurchaseItemById(@PathVariable Long id) {
-        LOGGER.info("getPurchaseProductById: " + id + " called");
-        return repo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Purchased product id: " + id + " not valid"));
+        try {
+            LOGGER.info("getPurchaseProductById: " + id + " called");
+            return repo.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Purchased product id: " + id + " not valid"));
+        } catch (Exception e) {
+            LOGGER.warning(e.toString());
+        }
+        return null;
     }
 
+    @Retryable
     @PostMapping("/add")
-    public String addPurchaseProduct(@RequestBody PurchaseProduct purchaseProduct) {
-
+    public String addPurchaseProduct(@Valid @RequestBody PurchaseProduct purchaseProduct) {
         try {
             Product product = restTemplate.getForObject(
                     "http://service-products:8080/products/" + purchaseProduct.getProductId(), Product.class);
@@ -68,6 +79,7 @@ public class PurchaseProductController {
         return "Product id not valid";
     }
 
+    @Retryable
     @RequestMapping("/delete/{id}")
     public String deletePurchaseProduct(@PathVariable Long id) {
         if (repo.findById(id).isPresent()) {

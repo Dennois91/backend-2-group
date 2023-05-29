@@ -14,8 +14,8 @@ services:
     restart: always
 
   service-purchases:
-#    build: .
-    image: ghcr.io/lukaschyle/order
+    build: .
+#    image: ghcr.io/lukaschyle/order
     ports:
       - "8001:8080"
     environment:
