@@ -7,8 +7,6 @@ import com.example.order.model.PurchaseProduct;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -42,14 +40,9 @@ public class PurchaseProductController {
     @Retryable
     @RequestMapping("/{id}")
     public PurchaseProduct getPurchaseItemById(@PathVariable Long id) {
-        try {
             LOGGER.info("getPurchaseProductById: " + id + " called");
             return repo.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException("Purchased product id: " + id + " not valid"));
-        } catch (Exception e) {
-            LOGGER.warning(e.toString());
-        }
-        return null;
     }
 
     @Retryable

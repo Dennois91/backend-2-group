@@ -36,14 +36,9 @@ public class PurchaseController {
     @Retryable
     @RequestMapping("/{id}")
     public Purchase getPurchaseById(@PathVariable Long id) {
-        try {
             LOGGER.info("getPurchaseById: " + id + " called");
             return repo.findById(id).orElseThrow(()
                     -> new EntityNotFoundException("Purchase id: " + id + " not valid"));
-        } catch (Exception e) {
-            LOGGER.warning(e.toString());
-        }
-        return null;
     }
 
     @Retryable
