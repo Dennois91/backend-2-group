@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -80,29 +82,37 @@ public class CustomerController {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException e){
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + HttpStatus.INTERNAL_SERVER_ERROR
-                + " - Customer with the specified ID does not exist!" + " Id used = " + e.getMessage());
+    public ResponseEntity<String> handleEntityNotFoundException(Exception e){
+        log.warn("handleEntityNotFoundException: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(HttpStatus.INTERNAL_SERVER_ERROR
+                + ": " + e.getMessage() + ". " + LocalDateTime.now());
     }
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<String> handleMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request. Please check the URL.");
-    }
-    @ExceptionHandler(HttpClientErrorException.BadRequest.class)
-    public ResponseEntity<String> handleBadRequestException(HttpClientErrorException.BadRequest e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("BadRequest" + e.getMessage());
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<String> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        log.warn("MethodArgumentTypeMismatchException: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST
+                + ": " +  e.getMessage() + ". " + LocalDateTime.now());
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request. Please check the URL.");
+    public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.warn("MethodArgumentNotValidException: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST
+                + ": " +  e.getMessage() + ". " + LocalDateTime.now());
     }
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<String> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request. Please check the URL.");
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<String> handleHttpMessageNotReadable(HttpMessageNotReadableException e){
+        log.warn("HttpMessageNotReadableException: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST
+                + ": " +  e.getMessage() + ". " + LocalDateTime.now());
     }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
+    public ResponseEntity<String> handleException(Exception e) {
+        log.warn("Exception: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(HttpStatus.INTERNAL_SERVER_ERROR
+                + ": " +  e.getMessage() + ". " + LocalDateTime.now());
     }
 
 
